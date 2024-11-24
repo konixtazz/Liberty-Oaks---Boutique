@@ -2,7 +2,7 @@ body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #f4f4f4;
+    background-color: #1e1c1c;
     color: #333;
     line-height: 1.6;
   }
@@ -10,7 +10,7 @@ body {
   header {
     text-align: center;
     padding: 20px;
-    background-color: #444;
+    background-color: #2a304a;
     color: #fff;
   }
   
@@ -63,10 +63,18 @@ body {
     background-color: #218838;
   }
   
+  section {
+    padding: 12px;
+    margin: 12px;
+    background: #1e1c1c;
+    border-radius: 12px;
+    box-shadow: 0 0 10px rgb(42, 48, 74);
+  }
+
   footer {
     text-align: center;
     padding: 10px;
-    background-color: #444;
+    background-color: #2a304a;
     color: #fff;
   }
   
