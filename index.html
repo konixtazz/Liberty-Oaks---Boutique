@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Boutique - Serveur FiveM</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header>
+    <h1>Bienvenue dans la boutique</h1>
+    <p>Achetez des articles pour améliorer votre expérience sur notre serveur !</p>
+  </header>
+
+  <section class="shop">
+    <div class="item">
+      <h2>Pack débutant</h2>
+      <p>Inclut 50 000$ en jeu et une voiture basique.</p>
+      <span class="price">5€</span>
+      <button onclick="buyItem('pack_debutant')">Acheter</button>
+    </div>
+
+    <div class="item">
+      <h2>Super voiture</h2>
+      <p>Une voiture exclusive pour les joueurs VIP.</p>
+      <span class="price">10€</span>
+      <button onclick="buyItem('super_voiture')">Acheter</button>
+    </div>
+
+    <div class="item">
+      <h2>Monnaie en jeu</h2>
+      <p>100 000$ à dépenser sur le serveur.</p>
+      <span class="price">7€</span>
+      <button onclick="buyItem('monnaie_jeu')">Acheter</button>
+    </div>
+  </section>
+
+  <footer>
+    <p>&copy; 2024 Nom du Serveur. Tous droits réservés.</p>
+  </footer>
+
+  <script>
+    function buyItem(item) {
+      alert(`Vous avez sélectionné l'article : ${item}`);
+      // Rediriger vers une page de paiement
+      window.location.href = `https://ton-site.com/paiement?article=${item}`;
+    }
+  </script>
+</body>
+</html>
