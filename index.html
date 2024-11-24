@@ -3,47 +3,157 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Boutique - Serveur FiveM</title>
+  <title>Boutique avec comptes</title>
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
   <header>
     <h1>Bienvenue dans la boutique</h1>
-    <p>Achetez des articles pour améliorer votre expérience sur notre serveur !</p>
+    <p>Soutenez notre serveur en achetant des contenus exclusifs !</p>
+    <div id="account-section">
+      <div id="logged-out">
+        <button onclick="showLoginForm()">Connexion</button>
+        <button onclick="showRegisterForm()">Créer un compte</button>
+      </div>
+      <div id="logged-in" style="display: none;">
+        <p>Bonjour, <span id="user-name"></span> !</p>
+        <button onclick="logout()">Déconnexion</button>
+      </div>
+    </div>
   </header>
 
-  <section class="shop">
+  <section id="shop">
+    <h2>Boutique</h2>
     <div class="item">
-      <h2>Pack débutant</h2>
-      <p>Inclut 50 000$ en jeu et une voiture basique.</p>
+      <h3>Pack débutant</h3>
+      <p>50 000$ en jeu et une voiture.</p>
       <span class="price">5€</span>
-      <button onclick="buyItem('pack_debutant')">Acheter</button>
+      <button onclick="buyItem('Pack débutant', 5)">Acheter</button>
     </div>
-
     <div class="item">
-      <h2>Super voiture</h2>
-      <p>Une voiture exclusive pour les joueurs VIP.</p>
+      <h3>Super voiture</h3>
+      <p>Voiture exclusive pour VIP.</p>
       <span class="price">10€</span>
-      <button onclick="buyItem('super_voiture')">Acheter</button>
-    </div>
-
-    <div class="item">
-      <h2>Monnaie en jeu</h2>
-      <p>100 000$ à dépenser sur le serveur.</p>
-      <span class="price">7€</span>
-      <button onclick="buyItem('monnaie_jeu')">Acheter</button>
+      <button onclick="buyItem('Super voiture', 10)">Acheter</button>
     </div>
   </section>
+
+  <!-- Modals -->
+  <div id="modal" class="modal" style="display: none;">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal()">&times;</span>
+      <div id="login-form" style="display: none;">
+        <h2>Connexion</h2>
+        <input type="text" id="login-username" placeholder="Nom d'utilisateur" />
+        <input type="password" id="login-password" placeholder="Mot de passe" />
+        <button onclick="login()">Se connecter</button>
+      </div>
+      <div id="register-form" style="display: none;">
+        <h2>Créer un compte</h2>
+        <input type="text" id="register-username" placeholder="Nom d'utilisateur" />
+        <input type="password" id="register-password" placeholder="Mot de passe" />
+        <button onclick="register()">S'inscrire</button>
+      </div>
+    </div>
+  </div>
 
   <footer>
     <p>&copy; 2024 Nom du Serveur. Tous droits réservés.</p>
   </footer>
 
   <script>
-    function buyItem(item) {
-      
-      // Rediriger vers une page de paiement
-      window.location.href = `https://konixtazz.github.io/Liberty-Oaks-Payment/`;
+    // Gestion des modales
+    function showLoginForm() {
+      document.getElementById('modal').style.display = 'block';
+      document.getElementById('login-form').style.display = 'block';
+      document.getElementById('register-form').style.display = 'none';
+    }
+
+    function showRegisterForm() {
+      document.getElementById('modal').style.display = 'block';
+      document.getElementById('register-form').style.display = 'block';
+      document.getElementById('login-form').style.display = 'none';
+    }
+
+    function closeModal() {
+      document.getElementById('modal').style.display = 'none';
+      document.getElementById('login-form').style.display = 'none';
+      document.getElementById('register-form').style.display = 'none';
+    }
+
+    // Simulations de connexion/déconnexion
+    function login() {
+  const username = document.getElementById('login-username').value;
+  const password = document.getElementById('login-password').value;
+
+  fetch('login.php', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    body: `username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}`,
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      if (data.success) {
+        localStorage.setItem('user', data.username);
+        updateAccountUI();
+        closeModal();
+        alert(data.message);
+      } else {
+        alert(data.message);
+      }
+    })
+    .catch((error) => console.error('Erreur :', error));
+}
+
+function register() {
+  const username = document.getElementById('register-username').value;
+  const password = document.getElementById('register-password').value;
+
+  fetch('register.php', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    body: `username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}`,
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      if (data.success) {
+        alert(data.message);
+        closeModal();
+      } else {
+        alert(data.message);
+      }
+    })
+    .catch((error) => console.error('Erreur :', error));
+}
+
+    function logout() {
+      localStorage.removeItem('user');
+      updateAccountUI();
+    }
+
+    function updateAccountUI() {
+      const user = localStorage.getItem('user');
+      if (user) {
+        document.getElementById('logged-in').style.display = 'block';
+        document.getElementById('logged-out').style.display = 'none';
+        document.getElementById('user-name').textContent = user;
+      } else {
+        document.getElementById('logged-in').style.display = 'none';
+        document.getElementById('logged-out').style.display = 'block';
+      }
+    }
+
+    // Vérifie l'état de l'utilisateur au chargement
+    document.addEventListener('DOMContentLoaded', updateAccountUI);
+
+    // Gestion des achats
+    function buyItem(itemName, price) {
+      const user = localStorage.getItem('user');
+      if (!user) {
+        alert("Vous devez être connecté pour effectuer un achat.");
+        return;
+      }
+      alert(`Vous avez acheté ${itemName} pour ${price}€.`);
     }
   </script>
 </body>
